@@ -1,18 +1,150 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Oficina Central - Mi Factoría Web</title>
-    <link rel="stylesheet" href="css/styles.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reservas - Parrilla El Tano</title>
+    <style>
+        :root {
+            --rojo-tano: #d32f2f;
+            --negro-carbon: #212121;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
+            url('https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: white;
+        }
+
+        .reserva-container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+            width: 100%;
+            max-width: 450px;
+            color: var(--negro-carbon);
+            text-align: center;
+        }
+
+        .reserva-container h1 {
+            margin-top: 0;
+            color: var(--rojo-tano);
+            font-size: 2rem;
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 15px;
+        }
+
+        .reserva-container p {
+            color: #666;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 1rem;
+        }
+
+        .btn-reservar {
+            background-color: var(--rojo-tano);
+            color: white;
+            border: none;
+            padding: 15px;
+            width: 100%;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s, background 0.3s;
+            margin-top: 10px;
+        }
+
+        .btn-reservar:hover {
+            background-color: #b71c1c;
+            transform: scale(1.02);
+        }
+
+        .footer-info {
+            margin-top: 20px;
+            font-size: 0.8rem;
+            color: #888;
+        }
+
+        .admin-link {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: white;
+            text-decoration: none;
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+        .admin-link:hover { opacity: 1; }
+    </style>
 </head>
 <body>
-<h1>🥩 Parrilla El Tano - Reservas</h1>
-<form action="/reservar" method="post">
-    <input type="text" name="clienteNombre" placeholder="Tu Nombre" required><br>
-    <input type="number" name="cantidadPersonas" placeholder="Personas" required><br>
-    <input type="datetime-local" name="fechaHora" required><br>
-    <input type="text" name="telefono" placeholder="WhatsApp / Teléfono" required><br>
-    <button type="submit">Reservar Mesa</button>
-</form>
+
+<a href="/login" class="admin-link">Acceso Personal</a>
+
+<div class="reserva-container">
+    <h1>🥩 El Tano</h1>
+    <p>Reservá tu mesa y vení a disfrutar de la mejor parrilla argentina.</p>
+
+    <form action="/reservar" method="post">
+        <div class="form-group">
+            <label>Nombre Completo</label>
+            <input type="text" name="clienteNombre" placeholder="Ej: Juan Pérez" required>
+        </div>
+
+        <div class="form-group">
+            <label>Cantidad de Personas</label>
+            <input type="number" name="cantidadPersonas" min="1" max="20" placeholder="¿Cuántos son?" required>
+        </div>
+
+        <div class="form-group">
+            <label>Fecha y Hora</label>
+            <input type="datetime-local" name="fechaHora" required>
+        </div>
+
+        <div class="form-group">
+            <label>Teléfono / WhatsApp</label>
+            <input type="text" name="telefono" placeholder="Ej: 11 2233 4455" required>
+        </div>
+
+        <button type="submit" class="btn-reservar">CONFIRMAR RESERVA</button>
+    </form>
+
+    <div class="footer-info">
+        📍 Av. Principal 123, Buenos Aires<br>
+        📞 011 4444-5555
+    </div>
+</div>
+
 </body>
 </html>
