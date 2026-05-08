@@ -1,12 +1,16 @@
 package com.reservas.eltano.controller;
 
 import com.reservas.eltano.model.Reserva;
+import com.reservas.eltano.model.Configuracion;
+import com.reservas.eltano.repository.ConfiguracionRepository;
 import com.reservas.eltano.service.ReservaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Controller
@@ -15,36 +19,78 @@ public class ReservaController {
     @Autowired
     private ReservaService reservaService;
 
-    // --- RUTAS PÚBLICAS (Archivos en /static) ---
+    @Autowired
+    private ConfiguracionRepository configRepo;
 
-    // Al entrar a la raíz, redirigimos al index.html que está en static
     @GetMapping("/")
-    public String raiz() {
-        return "redirect:/index.html";
+    public String raiz(Model model) {
+        boolean sistemaAbierto = configRepo.findByClave("SISTEMA_ABIERTO")
+                .map(c -> Boolean.parseBoolean(c.getValor()))
+                .orElse(true);
+        model.addAttribute("sistemaAbierto", sistemaAbierto);
+        model.addAttribute("reserva", new Reserva());
+        return "index";
     }
 
     @PostMapping("/reservar")
     public String procesarReserva(@ModelAttribute Reserva reserva) {
+        boolean sistemaAbierto = configRepo.findByClave("SISTEMA_ABIERTO")
+                .map(c -> Boolean.parseBoolean(c.getValor()))
+                .orElse(true);
+
+        if (!sistemaAbierto) return "redirect:/?error=sistema_cerrado";
+
         reservaService.guardarReserva(reserva);
-        // Redirige al archivo estático success.html
         return "redirect:/success.html";
     }
 
-    // --- RUTAS DE ADMINISTRACIÓN (Archivos en /templates) ---
-
     @GetMapping("/admin")
-    public String listarReservas(Model model) {
-        List<Reserva> lista = reservaService.obtenerTodas();
-        Integer totalComensales = reservaService.obtenerTotalComensales();
+    public String listarReservas(
+            @RequestParam(name = "fecha", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha,
+            Model model) {
+
+        List<Reserva> lista;
+        int totalComensales;
+
+        // Estado del sistema
+        boolean sistemaAbierto = configRepo.findByClave("SISTEMA_ABIERTO")
+                .map(c -> Boolean.parseBoolean(c.getValor()))
+                .orElse(true);
+
+        if (fecha != null) {
+            lista = reservaService.obtenerPorFecha(fecha);
+            totalComensales = reservaService.obtenerTotalComensalesPorFecha(fecha);
+            model.addAttribute("titulo", "Reservas: " + fecha);
+        } else {
+            lista = reservaService.obtenerTodas();
+            totalComensales = lista.stream()
+                    .filter(r -> !"CANCELADA".equals(r.getEstado()))
+                    .mapToInt(Reserva::getCantidadPersonas)
+                    .sum();
+            model.addAttribute("titulo", "Todas las Reservas");
+        }
 
         model.addAttribute("reservas", lista);
-        model.addAttribute("total", totalComensales != null ? totalComensales : 0);
-        return "admin"; // Busca admin.html en /templates
+        model.addAttribute("total", totalComensales);
+        model.addAttribute("sistemaAbierto", sistemaAbierto);
+        model.addAttribute("fechaFiltro", fecha);
+
+        return "admin";
     }
 
-    @GetMapping("/admin/estado/{id}/{nuevoEstado}")
-    public String actualizarEstado(@PathVariable Long id, @PathVariable String nuevoEstado) {
-        reservaService.cambiarEstado(id, nuevoEstado);
+    @PostMapping("/admin/toggle-sistema")
+    public String toggleSistema() {
+        Configuracion config = configRepo.findByClave("SISTEMA_ABIERTO")
+                .orElseGet(() -> {
+                    Configuracion c = new Configuracion();
+                    c.setClave("SISTEMA_ABIERTO");
+                    c.setValor("true");
+                    return c;
+                });
+
+        boolean estadoActual = Boolean.parseBoolean(config.getValor());
+        config.setValor(String.valueOf(!estadoActual));
+        configRepo.save(config);
         return "redirect:/admin";
     }
 

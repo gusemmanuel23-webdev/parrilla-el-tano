@@ -45,11 +45,6 @@
             padding-bottom: 15px;
         }
 
-        .reserva-container p {
-            color: #666;
-            margin-bottom: 25px;
-        }
-
         .form-group {
             margin-bottom: 15px;
             text-align: left;
@@ -90,6 +85,20 @@
             transform: scale(1.02);
         }
 
+        /* ESTILOS PARA EL AVISO DE CIERRE */
+        .aviso-cerrado {
+            background-color: #fff3f3;
+            border: 2px solid var(--rojo-tano);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .aviso-cerrado h2 {
+            color: var(--rojo-tano);
+            margin-top: 0;
+        }
+
         .footer-info {
             margin-top: 20px;
             font-size: 0.8rem;
@@ -114,31 +123,40 @@
 
 <div class="reserva-container">
     <h1>🥩 El Tano</h1>
-    <p>Reservá tu mesa y vení a disfrutar de la mejor parrilla argentina.</p>
 
-    <form action="/reservar" method="post">
-        <div class="form-group">
-            <label>Nombre Completo</label>
-            <input type="text" name="clienteNombre" placeholder="Ej: Juan Pérez" required>
-        </div>
+    <div th:if="${sistemaAbierto}">
+        <p>Reservá tu mesa y vení a disfrutar de la mejor parrilla argentina.</p>
+        <form action="/reservar" method="post" th:object="${reserva}">
+            <div class="form-group">
+                <label>Nombre Completo</label>
+                <input type="text" name="clienteNombre" placeholder="Ej: Juan Pérez" required>
+            </div>
 
-        <div class="form-group">
-            <label>Cantidad de Personas</label>
-            <input type="number" name="cantidadPersonas" min="1" max="20" placeholder="¿Cuántos son?" required>
-        </div>
+            <div class="form-group">
+                <label>Cantidad de Personas</label>
+                <input type="number" name="cantidadPersonas" min="1" max="20" placeholder="¿Cuántos son?" required>
+            </div>
 
-        <div class="form-group">
-            <label>Fecha y Hora</label>
-            <input type="datetime-local" name="fechaHora" required>
-        </div>
+            <div class="form-group">
+                <label>Fecha y Hora</label>
+                <input type="datetime-local" name="fechaHora" required>
+            </div>
 
-        <div class="form-group">
-            <label>Teléfono / WhatsApp</label>
-            <input type="text" name="telefono" placeholder="Ej: 11 2233 4455" required>
-        </div>
+            <div class="form-group">
+                <label>Teléfono / WhatsApp</label>
+                <input type="text" name="telefono" placeholder="Ej: 11 2233 4455" required>
+            </div>
 
-        <button type="submit" class="btn-reservar">CONFIRMAR RESERVA</button>
-    </form>
+            <button type="submit" class="btn-reservar">CONFIRMAR RESERVA</button>
+        </form>
+    </div>
+
+    <div th:unless="${sistemaAbierto}" class="aviso-cerrado">
+        <h2>⚠️ Salón Lleno</h2>
+        <p>Por el momento no estamos tomando más reservas por la web para este turno.</p>
+        <p><strong>Consultá disponibilidad llamando al:</strong><br>
+            <span style="font-size: 1.2rem;">011 4444-5555</span></p>
+    </div>
 
     <div class="footer-info">
         📍 Av. Principal 123, Buenos Aires<br>

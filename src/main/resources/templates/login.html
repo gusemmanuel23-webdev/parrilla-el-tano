@@ -17,7 +17,6 @@
       align-items: center;
       height: 100vh;
       margin: 0;
-      /* Agregamos un degradado sutil para dar profundidad */
       background: linear-gradient(135deg, #f4f4f4 0%, #e0e0e0 100%);
     }
 
@@ -56,7 +55,7 @@
       padding: 12px;
       border: 1px solid #ddd;
       border-radius: 6px;
-      box-sizing: border-box; /* Importante para que el padding no ensanche el input */
+      box-sizing: border-box;
     }
 
     .btn-login {
@@ -120,7 +119,7 @@
   </form>
 
   <div style="margin-top: 15px; text-align: center;">
-    <a href="/" style="text-decoration: none; color: #666; font-size: 0.9em;">
+    <a th:href="@{/}" style="text-decoration: none; color: #666; font-size: 0.9em;">
       ← Volver al Inicio Público
     </a>
   </div>
