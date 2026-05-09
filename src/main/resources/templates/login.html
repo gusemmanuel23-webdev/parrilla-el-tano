@@ -2,108 +2,20 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login - Parrilla El Tano</title>
-  <style>
-    :root {
-      --rojo-tano: #d32f2f;
-      --negro-carbon: #212121;
-    }
-
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #f4f4f4;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-      background: linear-gradient(135deg, #f4f4f4 0%, #e0e0e0 100%);
-    }
-
-    .login-card {
-      background: white;
-      padding: 40px;
-      border-radius: 12px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-      width: 100%;
-      max-width: 400px;
-      text-align: center;
-    }
-
-    .login-card h2 {
-      color: var(--negro-carbon);
-      margin-bottom: 25px;
-      border-bottom: 3px solid var(--rojo-tano);
-      display: inline-block;
-      padding-bottom: 5px;
-    }
-
-    .form-group {
-      margin-bottom: 20px;
-      text-align: left;
-    }
-
-    .form-group label {
-      display: block;
-      margin-bottom: 8px;
-      color: #666;
-      font-weight: bold;
-    }
-
-    .form-group input {
-      width: 100%;
-      padding: 12px;
-      border: 1px solid #ddd;
-      border-radius: 6px;
-      box-sizing: border-box;
-    }
-
-    .btn-login {
-      background-color: var(--negro-carbon);
-      color: white;
-      border: none;
-      padding: 14px;
-      width: 100%;
-      border-radius: 6px;
-      font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-
-    .btn-login:hover {
-      background-color: var(--rojo-tano);
-    }
-
-    .error-msg {
-      color: var(--rojo-tano);
-      background: #ffebee;
-      padding: 10px;
-      border-radius: 4px;
-      margin-bottom: 20px;
-      font-size: 14px;
-    }
-
-    .logout-msg {
-      color: #2e7d32;
-      background: #e8f5e9;
-      padding: 10px;
-      border-radius: 4px;
-      margin-bottom: 20px;
-      font-size: 14px;
-    }
-  </style>
+  <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
-<body>
+<body class="login-body">
 
 <div class="login-card">
   <h2>Acceso Admin</h2>
 
   <div th:if="${param.error}" class="error-msg">
-    Usuario o contraseña incorrectos.
+    ⚠️ Usuario o contraseña incorrectos.
   </div>
   <div th:if="${param.logout}" class="logout-msg">
-    Has cerrado sesión correctamente.
+    ✓ Has cerrado sesión correctamente.
   </div>
 
   <form th:action="@{/login}" method="post">
@@ -118,16 +30,15 @@
     <button type="submit" class="btn-login">INGRESAR</button>
   </form>
 
-  <div style="margin-top: 15px; text-align: center;">
-    <a th:href="@{/}" style="text-decoration: none; color: #666; font-size: 0.9em;">
-      ← Volver al Inicio Público
-    </a>
+  <div style="margin-top: 20px;">
+    <a th:href="@{/}" class="back-link">← Volver al Inicio Público</a>
   </div>
 
-  <p style="margin-top: 20px; font-size: 12px; color: #999;">
-    Parrilla El Tano © 2026
+  <p style="margin-top: 25px; font-size: 11px; color: var(--text-muted); letter-spacing: 1px;">
+    PARRILLA EL TANO © 2026
   </p>
 </div>
 
+<script th:src="@{/js/main.js}" defer></script>
 </body>
 </html>

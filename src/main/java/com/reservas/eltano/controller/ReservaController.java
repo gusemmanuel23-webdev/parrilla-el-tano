@@ -4,11 +4,14 @@ import com.reservas.eltano.model.Reserva;
 import com.reservas.eltano.model.Configuracion;
 import com.reservas.eltano.repository.ConfiguracionRepository;
 import com.reservas.eltano.service.ReservaService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -33,15 +36,30 @@ public class ReservaController {
     }
 
     @PostMapping("/reservar")
-    public String procesarReserva(@ModelAttribute Reserva reserva) {
+    public String procesarReserva(@Valid @ModelAttribute Reserva reserva,
+                                  BindingResult bindingResult,
+                                  Model model,
+                                  RedirectAttributes redirectAttributes) {
+
+        // 1. Verificar si el sistema está abierto
         boolean sistemaAbierto = configRepo.findByClave("SISTEMA_ABIERTO")
                 .map(c -> Boolean.parseBoolean(c.getValor()))
                 .orElse(true);
 
         if (!sistemaAbierto) return "redirect:/?error=sistema_cerrado";
 
+        // 2. Verificar errores de validación (Nombre corto, fecha pasada, etc.)
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("sistemaAbierto", sistemaAbierto);
+            // Retornamos la misma vista del formulario para mostrar los errores
+            return "index";
+        }
+
+        // 3. Guardar y enviar mensaje de éxito
         reservaService.guardarReserva(reserva);
-        return "redirect:/success.html";
+        redirectAttributes.addFlashAttribute("mensajeExito", "¡Reserva confirmada! Te esperamos en El Tano.");
+
+        return "redirect:/"; // Redirigimos al inicio (donde está el formulario)
     }
 
     @GetMapping("/admin")
@@ -94,9 +112,20 @@ public class ReservaController {
         return "redirect:/admin";
     }
 
-    @GetMapping("/admin/eliminar/{id}")
+    @PostMapping("/admin/eliminar/{id}")
     public String eliminarReserva(@PathVariable Long id) {
         reservaService.eliminarReserva(id);
+        return "redirect:/admin";
+    }
+
+    @PostMapping("/admin/confirmar/{id}")
+    public String confirmarReserva(@PathVariable Long id) {
+        // Buscamos la reserva
+        Reserva reserva = reservaService.obtenerPorId(id);
+        if (reserva != null) {
+            reserva.setEstado("CONFIRMADA");
+            reservaService.guardarReserva(reserva); // Guardamos el cambio
+        }
         return "redirect:/admin";
     }
 }

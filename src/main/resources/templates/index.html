@@ -4,147 +4,46 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reservas - Parrilla El Tano</title>
-    <style>
-        :root {
-            --rojo-tano: #d32f2f;
-            --negro-carbon: #212121;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
-            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
-            url('https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=1350&q=80');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            color: white;
-        }
-
-        .reserva-container {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
-            width: 100%;
-            max-width: 450px;
-            color: var(--negro-carbon);
-            text-align: center;
-        }
-
-        .reserva-container h1 {
-            margin-top: 0;
-            color: var(--rojo-tano);
-            font-size: 2rem;
-            border-bottom: 2px solid #ddd;
-            padding-bottom: 15px;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-            text-align: left;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-            font-size: 0.9rem;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            box-sizing: border-box;
-            font-size: 1rem;
-        }
-
-        .btn-reservar {
-            background-color: var(--rojo-tano);
-            color: white;
-            border: none;
-            padding: 15px;
-            width: 100%;
-            border-radius: 8px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: transform 0.2s, background 0.3s;
-            margin-top: 10px;
-        }
-
-        .btn-reservar:hover {
-            background-color: #b71c1c;
-            transform: scale(1.02);
-        }
-
-        /* ESTILOS PARA EL AVISO DE CIERRE */
-        .aviso-cerrado {
-            background-color: #fff3f3;
-            border: 2px solid var(--rojo-tano);
-            padding: 20px;
-            border-radius: 10px;
-            margin: 20px 0;
-        }
-
-        .aviso-cerrado h2 {
-            color: var(--rojo-tano);
-            margin-top: 0;
-        }
-
-        .footer-info {
-            margin-top: 20px;
-            font-size: 0.8rem;
-            color: #888;
-        }
-
-        .admin-link {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            color: white;
-            text-decoration: none;
-            font-size: 0.9rem;
-            opacity: 0.7;
-        }
-        .admin-link:hover { opacity: 1; }
-    </style>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
 
-<a href="/login" class="admin-link">Acceso Personal</a>
+<a th:href="@{/login}" class="admin-link">Acceso Personal</a>
 
 <div class="reserva-container">
     <h1>🥩 El Tano</h1>
 
     <div th:if="${sistemaAbierto}">
         <p>Reservá tu mesa y vení a disfrutar de la mejor parrilla argentina.</p>
-        <form action="/reservar" method="post" th:object="${reserva}">
+
+        <form th:action="@{/reservar}" method="post" th:object="${reserva}">
+
+            <div th:if="${mensajeExito}" class="success-msg">
+                <p th:text="${mensajeExito}"></p>
+            </div>
+
             <div class="form-group">
                 <label>Nombre Completo</label>
-                <input type="text" name="clienteNombre" placeholder="Ej: Juan Pérez" required>
+                <input type="text" th:field="*{clienteNombre}" placeholder="Ej: Juan Pérez" required>
+                <p th:if="${#fields.hasErrors('clienteNombre')}" th:errors="*{clienteNombre}" class="error-msg"></p>
             </div>
 
             <div class="form-group">
                 <label>Cantidad de Personas</label>
-                <input type="number" name="cantidadPersonas" min="1" max="20" placeholder="¿Cuántos son?" required>
+                <input type="number" th:field="*{cantidadPersonas}" min="1" max="20" required>
+                <p th:if="${#fields.hasErrors('cantidadPersonas')}" th:errors="*{cantidadPersonas}" class="error-msg"></p>
             </div>
 
             <div class="form-group">
                 <label>Fecha y Hora</label>
-                <input type="datetime-local" name="fechaHora" required>
+                <input type="datetime-local" th:field="*{fechaHora}" id="fechaReserva" required>
+                <p th:if="${#fields.hasErrors('fechaHora')}" th:errors="*{fechaHora}" class="error-msg"></p>
             </div>
 
             <div class="form-group">
                 <label>Teléfono / WhatsApp</label>
-                <input type="text" name="telefono" placeholder="Ej: 11 2233 4455" required>
+                <input type="tel" th:field="*{telefono}" placeholder="Ej: 11 2233 4455" required>
+                <p th:if="${#fields.hasErrors('telefono')}" th:errors="*{telefono}" class="error-msg"></p>
             </div>
 
             <button type="submit" class="btn-reservar">CONFIRMAR RESERVA</button>
@@ -155,7 +54,7 @@
         <h2>⚠️ Salón Lleno</h2>
         <p>Por el momento no estamos tomando más reservas por la web para este turno.</p>
         <p><strong>Consultá disponibilidad llamando al:</strong><br>
-            <span style="font-size: 1.2rem;">011 4444-5555</span></p>
+            <span style="font-size: 1.2rem; color: white;">011 4444-5555</span></p>
     </div>
 
     <div class="footer-info">
@@ -164,5 +63,6 @@
     </div>
 </div>
 
+<script th:src="@{/js/main.js}"></script>
 </body>
 </html>

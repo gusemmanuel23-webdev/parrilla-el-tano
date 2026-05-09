@@ -1,0 +1,401 @@
+/* =========================================
+   1. ESTILOS GENERALES (Variables y Reset)
+   ========================================= */
+:root {
+    --bg-dark: #121212;
+    --card-bg: #1e1e1e;
+    --accent-red: #d32f2f;
+    --accent-orange: #ff9800;
+    --text-light: #e0e0e0;
+    --text-muted: #a0a0a0;
+    --input-bg: #2d2d2d;
+    --border-color: #3d3d3d;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--bg-dark);
+    color: var(--text-light);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* =========================================
+   2. ESTILOS SOLO INDEX.HTML
+   ========================================= */
+
+/* Enlace de Acceso Personal (esquina superior derecha) */
+.admin-link {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.85rem;
+    border: 1px solid #444;
+    padding: 8px 15px;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+.admin-link:hover {
+    color: var(--accent-orange);
+    border-color: var(--accent-orange);
+    background-color: rgba(255, 152, 0, 0.05);
+}
+
+/* Contenedor principal de la Reserva */
+.reserva-container {
+    background-color: var(--card-bg);
+    max-width: 500px;
+    margin: 40px auto;
+    padding: 2.5rem;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    border-top: 4px solid var(--accent-red); /* Detalle de color institucional */
+    text-align: center;
+}
+
+.reserva-container h1 {
+    color: var(--text-light);
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.reserva-container p {
+    color: var(--text-muted);
+    margin-bottom: 2rem;
+}
+
+/* Grupos del Formulario */
+.form-group {
+    text-align: left;
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    color: var(--text-light);
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px;
+    background-color: #252525;
+    border: 1px solid #444;
+    border-radius: 8px;
+    color: white;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: var(--accent-orange);
+}
+
+/* Botón de Reserva */
+.btn-reservar {
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(135deg, var(--accent-red) 0%, #b71c1c 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-reservar:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(211, 47, 47, 0.4);
+}
+
+/* Mensajes de Éxito y Error */
+.success-msg {
+    background-color: rgba(76, 175, 80, 0.1);
+    color: #81c784;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #2e7d32;
+    margin-bottom: 1.5rem;
+}
+
+.error-msg {
+    color: var(--accent-red);
+    font-size: 0.85rem;
+    margin-top: 5px;
+}
+
+/* Estado: Sistema Cerrado */
+.aviso-cerrado {
+    padding: 20px;
+    background-color: rgba(0,0,0,0.2);
+    border: 2px dashed #555;
+    border-radius: 10px;
+}
+
+.aviso-cerrado h2 {
+    color: var(--accent-orange);
+    margin-bottom: 1rem;
+}
+
+/* Footer con info de contacto */
+.footer-info {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #333;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+}
+/* =========================================
+   ESTILOS SOLO LOGIN.HTML
+   ========================================= */
+
+.login-body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: radial-gradient(circle, #1a1a1a 0%, #0a0a0a 100%);
+    margin: 0;
+}
+
+.login-card {
+    background-color: var(--card-bg);
+    padding: 2.5rem;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    border-top: 4px solid var(--accent-red);
+}
+
+.login-card h2 {
+    color: var(--accent-orange);
+    margin-bottom: 1.5rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 1.5rem;
+}
+
+/* Mensajes de Feedback */
+.error-msg {
+    background-color: rgba(255, 0, 0, 0.1);
+    color: #ff4d4d;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    border: 1px solid #ff4d4d;
+}
+
+.logout-msg {
+    background-color: rgba(0, 255, 0, 0.1);
+    color: #4caf50;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    border: 1px solid #4caf50;
+}
+
+/* Formulario interno */
+.login-card .form-group {
+    text-align: left;
+    margin-bottom: 1.2rem;
+}
+
+.login-card label {
+    display: block;
+    color: var(--text-light);
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.login-card input {
+    width: 100%;
+    padding: 12px;
+    background-color: #2a2a2a;
+    border: 1px solid #444;
+    border-radius: 6px;
+    color: white;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+
+.login-card input:focus {
+    outline: none;
+    border-color: var(--accent-orange);
+}
+
+/* Botón de Ingreso */
+.btn-login {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, var(--accent-red), var(--accent-orange));
+    border: none;
+    border-radius: 6px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    margin-top: 10px;
+}
+
+.btn-login:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(211, 47, 47, 0.4);
+}
+
+.btn-login:active {
+    transform: translateY(0);
+}
+
+/* Link de regreso */
+.back-link {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: color 0.3s;
+}
+
+.back-link:hover {
+    color: var(--accent-orange);
+}
+/* =========================================
+   4. ESTILOS SOLO SUCCESS.HTML (Próximamente)
+   ========================================= */
+.success-message {
+    /* Pendiente de implementación */
+}
+
+/* =========================================
+   4. ESTILOS SOLO ADMIN.HTML
+   ========================================= */
+
+/* Corrección de Layout: El admin necesita flujo vertical, no centrado flex */
+.admin-body {
+    display: block !important;
+    background-color: var(--bg-dark);
+    min-height: 100vh;
+    padding-bottom: 50px;
+}
+
+/* Navbar Institucional */
+.admin-navbar {
+    background-color: #1a1a1a !important;
+    border-bottom: 3px solid var(--accent-red);
+    padding: 1rem 0;
+}
+
+/* Tarjetas y Contenedores */
+.admin-card {
+    background-color: #242424 !important;
+    border: 1px solid #3d3d3d !important;
+    border-radius: 12px !important;
+    color: var(--text-light) !important;
+    margin-bottom: 1.5rem;
+}
+
+.admin-card .card-header {
+    background-color: #2d2d2d !important;
+    border-bottom: 1px solid #3d3d3d;
+    color: var(--accent-orange);
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+}
+
+/* Tabla de Reservas */
+.admin-table {
+    color: var(--text-light) !important;
+    margin-bottom: 0;
+}
+
+.admin-table thead th {
+    background-color: #2d2d2d !important;
+    color: var(--text-muted);
+    border-bottom: 2px solid var(--accent-red) !important;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+}
+
+.admin-table tbody tr {
+    border-bottom: 1px solid #333;
+    transition: background 0.3s ease;
+}
+
+.admin-table tbody tr:hover {
+    background-color: #2d2d2d !important;
+}
+
+/* Estados (Badges) */
+.badge-status {
+    font-size: 0.7rem;
+    padding: 4px 8px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+/* Botón de Pánico (Apertura/Cierre) */
+.btn-panic {
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 12px;
+    transition: transform 0.2s;
+}
+
+.btn-panic:hover {
+    transform: scale(1.02);
+}
+
+/* Inputs de Filtro */
+.admin-form-control {
+    background-color: #2d2d2d !important;
+    border: 1px solid #444 !important;
+    color: white !important;
+}
+
+.admin-form-control:focus {
+    border-color: var(--accent-red) !important;
+    box-shadow: 0 0 0 0.25rem rgba(255, 69, 0, 0.25) !important;
+}
+
+/* Botón WhatsApp */
+.btn-whatsapp {
+    color: #25D366;
+    font-size: 1.2rem;
+    transition: color 0.3s;
+}
+
+.btn-whatsapp:hover {
+    color: #128C7E;
+}
+
+/* Texto de Identidad */
+.text-tano-red {
+    color: var(--accent-red) !important;
+    text-shadow: 0 0 10px rgba(255, 0, 0, 0.2);
+}

@@ -47,6 +47,12 @@ public class ReservaService {
         reservaRepository.save(reserva);
     }
 
+    public Reserva obtenerPorId(Long id) {
+        // findById devuelve un Optional, usamos orElse(null)
+        // para que si no la encuentra, devuelva null y no rompa el programa.
+        return reservaRepository.findById(id).orElse(null);
+    }
+
     public void eliminarReserva(Long id) {
         reservaRepository.deleteById(id);
     }
