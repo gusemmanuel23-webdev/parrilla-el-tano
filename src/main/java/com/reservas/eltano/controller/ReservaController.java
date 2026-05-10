@@ -4,6 +4,7 @@ import com.reservas.eltano.model.Reserva;
 import com.reservas.eltano.model.Configuracion;
 import com.reservas.eltano.repository.ConfiguracionRepository;
 import com.reservas.eltano.service.ReservaService;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -39,8 +40,11 @@ public class ReservaController {
     public String procesarReserva(@Valid @ModelAttribute Reserva reserva,
                                   BindingResult bindingResult,
                                   Model model,
-                                  RedirectAttributes redirectAttributes) {
+                                  RedirectAttributes redirectAttributes, HttpServletResponse response) {
 
+        response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
+        response.setHeader("Pragma", "no-cache"); // HTTP 1.0.
+        response.setDateHeader("Expires", 0); // Proxies.
         // 1. Verificar si el sistema está abierto
         boolean sistemaAbierto = configRepo.findByClave("SISTEMA_ABIERTO")
                 .map(c -> Boolean.parseBoolean(c.getValor()))
@@ -57,15 +61,21 @@ public class ReservaController {
 
         // 3. Guardar y enviar mensaje de éxito
         reservaService.guardarReserva(reserva);
-        redirectAttributes.addFlashAttribute("mensajeExito", "¡Reserva confirmada! Te esperamos en El Tano.");
 
-        return "redirect:/"; // Redirigimos al inicio (donde está el formulario)
+        return "redirect:/reserva-exitosa";
+    }
+
+    @GetMapping("/reserva-exitosa")
+    public String reservaExitosa() {
+        return "success";
     }
 
     @GetMapping("/admin")
     public String listarReservas(
             @RequestParam(name = "fecha", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha,
             Model model) {
+
+
 
         List<Reserva> lista;
         int totalComensales;
@@ -125,6 +135,16 @@ public class ReservaController {
         if (reserva != null) {
             reserva.setEstado("CONFIRMADA");
             reservaService.guardarReserva(reserva); // Guardamos el cambio
+        }
+        return "redirect:/admin";
+    }
+
+    @PostMapping("/admin/cancelar/{id}")
+    public String cancelarReserva(@PathVariable Long id) {
+        Reserva reserva = reservaService.obtenerPorId(id);
+        if (reserva != null) {
+            reserva.setEstado("CANCELADA");
+            reservaService.guardarReserva(reserva);
         }
         return "redirect:/admin";
     }

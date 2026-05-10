@@ -100,6 +100,9 @@
                                         <form th:action="@{/admin/confirmar/{id}(id=${r.id})}" method="post">
                                             <button class="btn btn-sm btn-outline-success border-0" title="Confirmar"><i class="fas fa-check"></i></button>
                                         </form>
+                                        <form th:action="@{/admin/cancelar/{id}(id=${r.id})}" method="post">
+                                            <button class="btn btn-sm btn-outline-secondary border-0" title="Cancelar"><i class="fas fa-ban"></i></button>
+                                        </form>
                                         <form th:action="@{/admin/eliminar/{id}(id=${r.id})}" method="post">
                                             <button class="btn btn-sm btn-outline-danger border-0" title="Eliminar" onclick="return confirm('¿Eliminar reserva?')">
                                                 <i class="fas fa-trash"></i>

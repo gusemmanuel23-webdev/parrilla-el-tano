@@ -24,7 +24,7 @@ public class SecurityConfig {
                         .requestMatchers("/css/**", "/js/**", "/images/**", "/error", "/favicon.ico").permitAll()
 
                         // 2. Páginas públicas y proceso de reserva
-                        .requestMatchers("/", "/index.html", "/success.html", "/reservar/**").permitAll()
+                        .requestMatchers("/", "/index.html", "/success.html", "/reservar/**","/reserva-exitosa").permitAll()
 
                         // 3. Login: Permitir acceso a la página de login
                         .requestMatchers("/login").permitAll()
@@ -52,8 +52,11 @@ public class SecurityConfig {
                 )
                 .headers(headers -> headers
                         .frameOptions(frame -> frame.sameOrigin())
-                        // Headers para que el navegador no guarde versiones viejas del panel (importante para el botón de estado)
-                        .addHeaderWriter(new StaticHeadersWriter("Cache-Control", "no-cache, no-store, max-age=0, must-revalidate"))
+                        // Deshabilitamos el cache predeterminado de Spring y aplicamos el nuestro
+                        // Esto asegura que al volver atrás, el navegador consulte al servidor
+                        .defaultsDisabled()
+                        .cacheControl(cache -> cache.disable())
+                        .addHeaderWriter(new StaticHeadersWriter("Cache-Control", "no-cache, no-store, must-revalidate"))
                         .addHeaderWriter(new StaticHeadersWriter("Pragma", "no-cache"))
                         .addHeaderWriter(new StaticHeadersWriter("Expires", "0"))
                 );

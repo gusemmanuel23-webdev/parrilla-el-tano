@@ -282,14 +282,75 @@ body {
     color: var(--accent-orange);
 }
 /* =========================================
-   4. ESTILOS SOLO SUCCESS.HTML (Próximamente)
+   3. ESTILOS SOLO PARA SUCCESS.HTML
    ========================================= */
-.success-message {
-    /* Pendiente de implementación */
+
+/* Contenedor principal con el fondo específico */
+.success-page {
+    background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)),
+    url('https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=1350&q=80');
+    background-size: cover;
+    background-position: center;
+}
+
+.success-wrapper {
+    padding: 20px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.success-card {
+    background-color: var(--card-bg); /* Usando tu variable */
+    border: 1px solid var(--border-color);
+    padding: 40px;
+    border-radius: 15px;
+    text-align: center;
+    max-width: 450px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    animation: slideUp 0.5s ease-out;
+}
+
+.success-icon {
+    font-size: 50px;
+    margin-bottom: 15px;
+}
+
+.success-card h1 {
+    color: var(--accent-red); /* Usando tu variable */
+    margin-bottom: 15px;
+    font-size: 1.8rem;
+}
+
+.success-card p {
+    color: var(--text-light);
+    line-height: 1.6;
+    margin-bottom: 30px;
+}
+
+.btn-home {
+    background-color: var(--accent-red);
+    color: white;
+    padding: 12px 30px;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: bold;
+    display: inline-block;
+    transition: transform 0.2s, background-color 0.2s;
+}
+
+.btn-home:hover {
+    background-color: #b71c1c; /* Un rojo un poco más oscuro */
+    transform: translateY(-2px);
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 /* =========================================
-   4. ESTILOS SOLO ADMIN.HTML
+   5. ESTILOS SOLO ADMIN.HTML
    ========================================= */
 
 /* Corrección de Layout: El admin necesita flujo vertical, no centrado flex */
